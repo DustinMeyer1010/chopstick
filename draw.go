@@ -13,12 +13,27 @@ func (c *chopstick) DrawText(text ...string) {
 	length := visibleLength(printString)
 
 	if length+c.x > c.terminal.width {
-		prevX := c.x
-		prevY := c.y
-		difference := c.terminal.width - c.x
-		Print(printString[:difference])
-		c.MoveTo(prevX, prevY)
+		drawnLen := 0
+		for drawnLen < length {
+			difference := c.terminal.width - c.x
+			if c.y >= c.terminal.height {
+				return
+			}
+			if difference > visibleLength(printString) {
+				Print(printString)
+				return
+			} else {
+				Print(printString[:difference])
+				printString = printString[difference:]
+				c.Down()
+				c.StartOfLine()
+			}
+
+		}
+		return
+
 	}
+	Print(printString)
 
 }
 

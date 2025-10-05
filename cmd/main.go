@@ -13,12 +13,13 @@ func main() {
 		Terminal(
 			chopstick.
 				NewTerminal().
-				ALTERNATE().
+				RawMode().
 				Height(10).
 				Width(10).
 				Wrap(),
 		).
 		Shape(chopstick.BlinkingUnderline)
+	fmt.Println(ch)
 	exit := true
 	for exit {
 		switch GetKeyPressed() {
@@ -31,7 +32,7 @@ func main() {
 		case "\033[D":
 			ch.Left()
 		case "u":
-			ch.DrawText("Anesthesiologist yest this ")
+			ch.DrawText("abcdefghijklmnopqrstuv")
 		default:
 			exit = false
 		}

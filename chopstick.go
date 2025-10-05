@@ -16,15 +16,6 @@ type code string
 
 type cshape string
 
-/*
-ESC[0 q 	changes cursor shape to steady block
-ESC[1 q 	changes cursor shape to steady block also
-ESC[2 q 	changes cursor shape to blinking block
-ESC[3 q 	changes cursor shape to steady underline
-ESC[4 q 	changes cursor shape to blinking underline
-ESC[5 q 	changes cursor shape to steady bar
-ESC[6 q 	changes cursor shape to blinking bar
-*/
 const (
 	Default           cshape = "\033[0 q"
 	SteadyBlock       cshape = "\033[1 q"
