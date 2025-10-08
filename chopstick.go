@@ -3,6 +3,7 @@ package chopstick
 import "fmt"
 
 var Print = fmt.Print
+var Prinf = fmt.Printf
 
 // Cursor aka Chopstick
 type chopstick struct {
@@ -31,6 +32,7 @@ const (
 	Hide                   code = "\033[?25l" // Hides chopstick
 	Show                   code = "\033[?25h" // Shows the chopstick
 	RightArrow             code = "\033[C"    // Moves chopstick right
+	RightArrowN            code = "\x1b[%dC"  // Move chopstick to right n times
 	LeftArrow              code = "\033[D"    // Moves chopstick left
 	DownArrow              code = "\033[B"    // Moves chopstick down
 	UpArrow                code = "\033[A"    // Moves chopstick up
@@ -50,11 +52,13 @@ func NewChopstick() chopstick {
 	return chopstick{x: 0, y: 0, terminal: NewTerminal(), shape: Default}
 }
 
+// Set the terminal for chopstick will use default terminal
 func (c chopstick) Terminal(terminal terminal) chopstick {
 	c.terminal = terminal
 	return c
 }
 
+// Sets the shape fo the chopstick
 func (c chopstick) Shape(shape cshape) chopstick {
 	Print(shape)
 	c.shape = shape

@@ -1,6 +1,7 @@
 package chopstick
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -10,31 +11,44 @@ var ansiRegex = regexp.MustCompile(`\x1b\[[0-9;]*m`)
 // Draw Text to screen ansi character are ignored
 func (c *chopstick) DrawText(text ...string) {
 	printString := strings.Join(text, "")
-	length := visibleLength(printString)
+	realLength := len(ansiRegex.ReplaceAllString(printString, ""))
 
-	if length+c.x > c.terminal.width {
-		drawnLen := 0
-		for drawnLen < length {
-			difference := c.terminal.width - c.x
-			if c.y >= c.terminal.height {
-				return
-			}
-			if difference > visibleLength(printString) {
-				Print(printString)
-				return
-			} else {
-				Print(printString[:difference])
-				printString = printString[difference:]
-				c.Down()
-				c.StartOfLine()
-			}
+	debug.Println(realLength)
 
+	inEscape := false
+
+	for i := 0; i < len(printString); i++ {
+		b := printString[i]
+
+		if inEscape {
+			fmt.Printf("%c", b) // still print escape characters normally
+			// check if this is the end of an escape sequence (a letter)
+			if (b >= 'A' && b <= 'Z') || (b >= 'a' && b <= 'z') {
+				inEscape = false
+			}
+			continue
 		}
-		return
+
+		if b == 0x1b && i+1 < len(printString) && printString[i+1] == '[' {
+			inEscape = true
+			fmt.Printf("%c", b) // print the ESC
+			continue
+		}
+
+		switch b {
+		case '\n':
+			c.Down()
+		default:
+			fmt.Printf("%c", b)
+			Print(LeftArrow)
+			c.Right()
+		}
 
 	}
-	Print(printString)
 
+}
+
+func DrawTextWithReturn(text ...string) {
 }
 
 // Erase the Entire terminal

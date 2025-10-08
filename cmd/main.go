@@ -9,17 +9,19 @@ import (
 )
 
 func main() {
+	chopstick.LogInit()
+	//text := "\033[1;32;41mBold green text on red background\033[0m\n\n"
+
 	ch := chopstick.NewChopstick().
 		Terminal(
 			chopstick.
 				NewTerminal().
-				RawMode().
+				ALTERNATE().
 				Height(10).
 				Width(10).
 				Wrap(),
 		).
 		Shape(chopstick.BlinkingUnderline)
-	fmt.Println(ch)
 	exit := true
 	for exit {
 		switch GetKeyPressed() {
@@ -32,7 +34,7 @@ func main() {
 		case "\033[D":
 			ch.Left()
 		case "u":
-			ch.DrawText("abcdefghijklmnopqrstuv")
+			ch.RightN(5)
 		default:
 			exit = false
 		}

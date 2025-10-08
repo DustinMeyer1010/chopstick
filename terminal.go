@@ -12,7 +12,6 @@ type mode int
 const (
 	NORMAL mode = iota
 	ALTERNATE
-	RAW
 )
 
 const (
@@ -28,10 +27,18 @@ type terminal struct {
 	termState *term.State
 }
 
+// Creates a new terimal
+//
+// Default Values
+//
+//	Height: Max Terminal Height
+//	Width: Max Terminal Width
+//	Mode: Normal Mode
+//	wrap: False
 func NewTerminal() terminal {
 	width, height := getTerminalSize()
-	state, _ := term.GetState(int(os.Stdin.Fd()))
-	return terminal{height: width, width: height, mode: NORMAL, wrap: false, termState: state}
+	termState, _ := term.MakeRaw(int(os.Stdin.Fd()))
+	return terminal{height: width - 1, width: height - 1, mode: NORMAL, wrap: false, termState: termState}
 }
 
 // Set the height of the terminal
@@ -40,44 +47,43 @@ func (t terminal) Height(n int) terminal {
 	return t
 }
 
+// Set the Width of the terminal
 func (t terminal) Width(n int) terminal {
 	t.width = n
 	return t
 }
 
+// Set terminal for nowrapping of lines
 func (t terminal) NoWrap() terminal {
 	t.wrap = false
 	return t
 }
 
-// Chopstick will wrap and text will wrap
+// Set terminal to wrap lines
 func (t terminal) Wrap() terminal {
 	t.wrap = true
 	return t
 }
 
+// Set terminal to normal mode
 func (t terminal) Normal() terminal {
 	print(ALTERNATE_EXIT)
 	t.mode = NORMAL
-	term.Restore(int(os.Stdin.Fd()), t.termState)
-	state, _ := term.GetState(int(os.Stdin.Fd()))
-	t.termState = state
 	return t
 }
 
-func (t terminal) RawMode() terminal {
-	print(ALTERNATE_EXIT)
-	t.mode = RAW
-	t.termState, _ = term.MakeRaw(int(os.Stdin.Fd()))
-	return t
-}
-
+// Set terminal to alternate mode
 func (t terminal) ALTERNATE() terminal {
 	print(ALTERNATE_START)
 	t.mode = ALTERNATE
 	return t
 }
 
+func (t terminal) HasWrap() bool {
+	return t.wrap
+}
+
+// Retrieves the current terminal size
 func getTerminalSize() (int, int) {
 	width, height, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
