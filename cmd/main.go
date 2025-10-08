@@ -10,7 +10,23 @@ import (
 
 func main() {
 	chopstick.LogInit()
-	text := "123456789\033[1;32;41mBold green text on red background\033[0m\n\n"
+
+	i1 := chopstick.Ingrident{
+		Position: chopstick.Position{X: 0, Y: 5},
+		Value:    "\033[1;32;41m          \033[0m",
+	}
+
+	i2 := chopstick.Ingrident{
+		Position: chopstick.Position{X: 0, Y: 6},
+		Value:    "\033[1;32;41m          \033[0m",
+	}
+
+	i3 := chopstick.Ingrident{
+		Position: chopstick.Position{X: 0, Y: 7},
+		Value:    "\033[1;32;41m          \033[0m",
+	}
+
+	bento := chopstick.Bento{i1, i2, i3}
 
 	ch := chopstick.NewChopstick().
 		Terminal(
@@ -21,6 +37,7 @@ func main() {
 				Width(10),
 		).
 		Shape(chopstick.BlinkingUnderline)
+
 	exit := true
 	for exit {
 		switch GetKeyPressed() {
@@ -33,7 +50,7 @@ func main() {
 		case "\033[D":
 			ch.Left()
 		case "u":
-			ch.DrawTextWithReturn(text)
+			bento.Draw(&ch)
 		default:
 			exit = false
 		}

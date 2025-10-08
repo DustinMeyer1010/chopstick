@@ -12,14 +12,14 @@ import (
 func (c *chopstick) Right() {
 	if c.IsAtEnd() {
 		if c.terminal.HasHorizontalWrap() {
-			debug.Printf("wrapping: %d\n", c.position.x)
+			debug.Printf("wrapping: %d\n", c.position.X)
 			c.rightWithWrap()
 		}
-		debug.Printf("Right: %d\n", c.position.x)
+		debug.Printf("Right: %d\n", c.position.X)
 		return
 	}
-	c.position.x++
-	debug.Printf("Right: %d\n", c.position.x)
+	c.position.X++
+	debug.Printf("Right: %d\n", c.position.X)
 	Print(RightArrow)
 }
 
@@ -52,12 +52,12 @@ func (c *chopstick) Left() {
 		if c.terminal.HasHorizontalWrap() {
 			c.leftWithWrap()
 		}
-		debug.Printf("Left: %d\n", c.position.x)
+		debug.Printf("Left: %d\n", c.position.X)
 		return
 	}
 
-	c.position.x--
-	debug.Printf("Left: %d\n", c.position.x)
+	c.position.X--
+	debug.Printf("Left: %d\n", c.position.X)
 	Print(LeftArrow)
 }
 
@@ -65,7 +65,7 @@ func (c *chopstick) Left() {
 func (c *chopstick) leftWithWrap() {
 	c.Up()
 	c.EndOfLine()
-	c.position.x = c.terminal.width
+	c.position.X = c.terminal.width
 }
 
 // TODO:
@@ -92,19 +92,19 @@ func (c *chopstick) Up() {
 		if c.terminal.HasVerticalWrap() {
 			c.upWithWrap()
 		}
-		debug.Printf("Up: %d\n", c.position.y)
+		debug.Printf("Up: %d\n", c.position.Y)
 		return
 	}
 
-	c.position.y--
-	debug.Printf("Up: %d\n", c.position.y)
+	c.position.Y--
+	debug.Printf("Up: %d\n", c.position.Y)
 	Print(UpArrow)
 }
 
 // Handles wrapping of up in terminal
 func (c *chopstick) upWithWrap() {
 	c.Bottom()
-	c.position.y = c.terminal.height
+	c.position.Y = c.terminal.height
 }
 
 // TODO:
@@ -125,19 +125,19 @@ func (c *chopstick) Down() {
 	if c.IsAtBottom() {
 		if c.terminal.HasVerticalWrap() {
 			c.downWithWrap()
-			debug.Printf("Down: %d\n", c.position.y)
+			debug.Printf("Down: %d\n", c.position.Y)
 		}
 		return
 	}
 
-	c.position.y++
-	debug.Printf("Down: %d\n", c.position.y)
+	c.position.Y++
+	debug.Printf("Down: %d\n", c.position.Y)
 	Print(DownArrow)
 }
 
 // Handles wrapping of down in terminal
 func (c *chopstick) downWithWrap() {
-	c.position.y = 0
+	c.position.Y = 0
 	c.Top()
 }
 
@@ -151,58 +151,58 @@ func (c *chopstick) DownN(n int) {
 
 // If chopstick at top of terminal returns True
 func (c chopstick) IsAtTop() bool {
-	return c.position.y <= 0
+	return c.position.Y <= 0
 }
 
 // If chopstick at bottom of terminal returns True
 func (c chopstick) IsAtBottom() bool {
-	return c.position.y >= c.terminal.height
+	return c.position.Y >= c.terminal.height
 }
 
 // If chopstick at end of line returns True
 func (c chopstick) IsAtEnd() bool {
-	return c.position.x >= c.terminal.width
+	return c.position.X >= c.terminal.width
 }
 
 // If chopstick at start of line returns True
 func (c chopstick) IsAtStart() bool {
-	return c.position.x <= 0
+	return c.position.X <= 0
 }
 
 // Moves Chopstick to end of current line
 func (c *chopstick) EndOfLine() {
-	Print(fmt.Sprintf("\033[%dG", c.terminal.width-c.position.x))
-	c.position.x = c.terminal.width
+	Print(fmt.Sprintf("\033[%dG", c.terminal.width-c.position.X))
+	c.position.X = c.terminal.width
 }
 
 // Move Chopstick to start of current line
 func (c *chopstick) StartOfLine() {
 	Print(Return)
-	c.position.x = 0
+	c.position.X = 0
 }
 
 // Moves Chopstick to Top and Start of line
 func (c *chopstick) StartOfPage() {
 	Print(Start)
-	c.position.x = 0
-	c.position.y = 0
+	c.position.X = 0
+	c.position.Y = 0
 }
 
 // Move chopstick to Bottom and end of line
 func (c *chopstick) EndOfPage() {
-	Print(fmt.Sprintf("\033[%d;%dH", c.terminal.height-c.position.y, c.terminal.width-c.position.y))
-	c.position.x = c.terminal.width
-	c.position.y = c.terminal.height
+	Print(fmt.Sprintf("\033[%d;%dH", c.terminal.height-c.position.Y, c.terminal.width-c.position.Y))
+	c.position.X = c.terminal.width
+	c.position.Y = c.terminal.height
 }
 
 // Moves chopstick to top of page keeping x
 func (c *chopstick) Top() {
-	fmt.Printf("\033[%dA", c.terminal.height-c.position.y)
+	fmt.Printf("\033[%dA", c.terminal.height-c.position.Y)
 }
 
 // Moves chopstick to bottom of page keeping x
 func (c *chopstick) Bottom() {
-	fmt.Printf("\033[%dB", c.terminal.height-c.position.y)
+	fmt.Printf("\033[%dB", c.terminal.height-c.position.Y)
 }
 
 // Move to any cordinate
@@ -210,12 +210,12 @@ func (c *chopstick) Bottom() {
 // Eample: Height, Width = 10,  x = 55,  y = 68
 //
 // x will move to 5 and y will move to 8
-func (c *chopstick) MoveTo(x, y int) {
+func (c *chopstick) MoveTo(position Position) {
 	c.StartOfPage()
-	for range x % (c.terminal.width + OFFSET) {
+	for range position.X % (c.terminal.width + OFFSET) {
 		c.Right()
 	}
-	for range y % (c.terminal.height + OFFSET) {
+	for range position.Y % (c.terminal.height + OFFSET) {
 		c.Down()
 	}
 }

@@ -6,8 +6,8 @@ var Print = fmt.Print
 var Printf = fmt.Printf
 
 type Position struct {
-	x int
-	y int
+	X int
+	Y int
 }
 
 // Cursor aka Chopstick
@@ -53,7 +53,7 @@ const (
 func NewChopstick() chopstick {
 	Print(Start)
 	Print(Default)
-	return chopstick{position: Position{x: 0, y: 0}, terminal: NewTerminal(), shape: Default}
+	return chopstick{position: Position{X: 0, Y: 0}, terminal: NewTerminal(), shape: Default}
 }
 
 // Set the terminal for chopstick will use default terminal

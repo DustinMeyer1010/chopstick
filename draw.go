@@ -22,7 +22,7 @@ func (c *chopstick) DrawText(text ...string) {
 	debug.Println(realLength)
 
 	inEscape := false
-	prevX := c.position.x
+	prevX := c.position.X
 
 	for i := 0; i < len(printString); {
 		r, size := utf8.DecodeRuneInString(printString[i:])
@@ -61,19 +61,19 @@ func (c *chopstick) DrawText(text ...string) {
 
 		}
 
-		if prevX == c.position.x && !c.terminal.HasHorizontalWrap() {
+		if prevX == c.position.X && !c.terminal.HasHorizontalWrap() {
 			break
 		}
-		prevX = c.position.x
+		prevX = c.position.X
 	}
 }
 
 // Samething as DrawText but return cursor to orginal position before drawing text
 func (c *chopstick) DrawTextWithReturn(text ...string) {
-	prevX := c.position.x
-	prevY := c.position.y
+	prevX := c.position.X
+	prevY := c.position.Y
 	c.DrawText(text...)
-	c.MoveTo(prevX, prevY)
+	c.MoveTo(Position{X: prevX, Y: prevY})
 }
 
 // Erase the Entire terminal
