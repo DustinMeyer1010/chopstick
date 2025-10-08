@@ -10,7 +10,7 @@ import (
 
 func main() {
 	chopstick.LogInit()
-	//text := "\033[1;32;41mBold green text on red background\033[0m\n\n"
+	text := "123456789\033[1;32;41mBold green text on red background\033[0m\n\n"
 
 	ch := chopstick.NewChopstick().
 		Terminal(
@@ -18,8 +18,7 @@ func main() {
 				NewTerminal().
 				ALTERNATE().
 				Height(10).
-				Width(10).
-				Wrap(),
+				Width(10),
 		).
 		Shape(chopstick.BlinkingUnderline)
 	exit := true
@@ -34,7 +33,7 @@ func main() {
 		case "\033[D":
 			ch.Left()
 		case "u":
-			ch.RightN(5)
+			ch.DrawTextWithReturn(text)
 		default:
 			exit = false
 		}

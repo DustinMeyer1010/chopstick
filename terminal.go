@@ -10,6 +10,10 @@ import (
 type mode int
 
 const (
+	OFFSET = 1 // For the terminal starting at 0 and not one
+)
+
+const (
 	NORMAL mode = iota
 	ALTERNATE
 )
@@ -20,48 +24,61 @@ const (
 )
 
 type terminal struct {
-	wrap      bool
-	mode      mode
-	height    int
-	width     int
-	termState *term.State
+	verticalWrap   bool
+	horizontalWrap bool
+	mode           mode
+	height         int
+	width          int
+	termState      *term.State
 }
 
 // Creates a new terimal
 //
-// Default Values
+// Default Values - Will automatically put terminal in raw mode
 //
 //	Height: Max Terminal Height
 //	Width: Max Terminal Width
 //	Mode: Normal Mode
-//	wrap: False
+//	VerticalWrap: False
+//	HorizontalWrap: False
 func NewTerminal() terminal {
 	width, height := getTerminalSize()
 	termState, _ := term.MakeRaw(int(os.Stdin.Fd()))
-	return terminal{height: width - 1, width: height - 1, mode: NORMAL, wrap: false, termState: termState}
+	return terminal{
+		height:         width - OFFSET,
+		width:          height - OFFSET,
+		mode:           NORMAL,
+		verticalWrap:   false,
+		horizontalWrap: false,
+		termState:      termState,
+	}
 }
 
 // Set the height of the terminal
+//
+// If N is greater than terminal height default to terminal height
 func (t terminal) Height(n int) terminal {
-	t.height = n
+	t.height = min(n-OFFSET, t.height-OFFSET)
 	return t
 }
 
-// Set the Width of the terminal
+// Set the width of the terminal
+//
+// If N is greater than terminal height default to terminal width
 func (t terminal) Width(n int) terminal {
-	t.width = n
+	t.width = min(n-OFFSET, t.width-OFFSET)
 	return t
 }
 
 // Set terminal for nowrapping of lines
-func (t terminal) NoWrap() terminal {
-	t.wrap = false
+func (t terminal) VerticalWrap() terminal {
+	t.verticalWrap = true
 	return t
 }
 
 // Set terminal to wrap lines
-func (t terminal) Wrap() terminal {
-	t.wrap = true
+func (t terminal) HorizontalWrap() terminal {
+	t.horizontalWrap = true
 	return t
 }
 
@@ -79,8 +96,14 @@ func (t terminal) ALTERNATE() terminal {
 	return t
 }
 
-func (t terminal) HasWrap() bool {
-	return t.wrap
+// Returns True is vertical wrap for terminal is on
+func (t terminal) HasVerticalWrap() bool {
+	return t.verticalWrap
+}
+
+// Returns False if horizontal wrap for terminal is on
+func (t terminal) HasHorizontalWrap() bool {
+	return t.horizontalWrap
 }
 
 // Retrieves the current terminal size

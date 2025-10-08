@@ -3,12 +3,16 @@ package chopstick
 import "fmt"
 
 var Print = fmt.Print
-var Prinf = fmt.Printf
+var Printf = fmt.Printf
+
+type Position struct {
+	x int
+	y int
+}
 
 // Cursor aka Chopstick
 type chopstick struct {
-	x        int
-	y        int
+	position Position
 	terminal terminal
 	shape    cshape
 }
@@ -49,7 +53,7 @@ const (
 func NewChopstick() chopstick {
 	Print(Start)
 	Print(Default)
-	return chopstick{x: 0, y: 0, terminal: NewTerminal(), shape: Default}
+	return chopstick{position: Position{x: 0, y: 0}, terminal: NewTerminal(), shape: Default}
 }
 
 // Set the terminal for chopstick will use default terminal
