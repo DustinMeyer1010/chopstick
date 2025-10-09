@@ -7,6 +7,40 @@
     <a href="https://pkg.go.dev/github.com/DustinMeyer1010/chopstick?tab=doc"><img src="https://img.shields.io/badge/-docs-blue?logo=go&logoColor=white&labelColor=gray" alt="GoDoc"></a>
 
 
-  Chopstick is a Go package that gives your terminal a pair of imaginary chopsticks for moving and drawing. It tracks a “cursor” (the chopstick) and keeps it within the boundaries of your terminal. You can plate up elements — text, symbols, or small UI components — and the chopstick will serve them neatly on the terminal, making it quick and easy to build interactive and visually appealing terminal GUIs.
+  Chopstick is a Go package that gives your terminal a pair of imaginary chopsticks for moving and drawing. It tracks a “cursor” (the chopstick) and keeps it within the boundaries of your terminal. You can plate up elements text, symbols, or small UI components and the chopstick will serve them neatly on the terminal, making it quick and easy to build interactive and visually appealing terminal GUIs.
 
-# How to Use
+# How to use
+1. Import the package
+    ```shell
+    go get github.com/DustinMeyer1010/chopstick
+    ```
+2. Create a chopstick
+    ```go
+    stick := chopstick.NewChopstick()
+    ```
+## Movement
+Use Up, Right, Left, Down methods to move chopstick
+```go
+stick.Right()
+stick.Left()
+stick.Down()
+stick.Up()
+```
+
+## Ingredients & Bento
+For saving a specific design and drawing it whenever needed
+
+### Ingredients
+1. Create an Ingridant & chopstick
+    ```go
+    stick := chopstick.NewChopstick()
+    redbar :=chopstick.Ingredients{
+            Position: chopstick.Position{X: 0, Y: 5},
+            Value:    "\033[1;32;41m          \033[0m",
+        }
+    ```
+2. Draw Ingridant giving it the chopsticks
+    ```go
+    redbar.Draw(&stick)
+    ```
+    <img src="Ingredient.gif" width="300" alt="Ingredient Example">

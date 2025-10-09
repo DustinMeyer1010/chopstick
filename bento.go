@@ -1,10 +1,10 @@
 package chopstick
 
 // Collection of ingridents to build a element or UI
-type Bento []Ingrident
+type Bento []Ingredients
 
 // Item to draw on the screen and where it will be drawn
-type Ingrident struct {
+type Ingredients struct {
 	Position Position
 	Value    string
 }
@@ -17,7 +17,7 @@ func (b *Bento) Draw(c *chopstick) {
 	c.MoveTo(prevPosition)
 }
 
-func (i *Ingrident) Draw(c *chopstick) {
+func (i *Ingredients) Draw(c *chopstick) {
 	c.MoveTo(i.Position)
 	c.DrawTextWithReturn(i.Value)
 }
