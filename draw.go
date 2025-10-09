@@ -19,7 +19,7 @@ var ansiRegex = regexp.MustCompile(`\x1b\[[0-9;]*m`)
 func (c *chopstick) DrawText(text ...string) {
 	printString := strings.Join(text, "")
 	realLength := len([]rune(ansiRegex.ReplaceAllString(printString, ""))) // rune-aware length
-	debug.Println(realLength)
+	Debug.Println(realLength)
 
 	inEscape := false
 	prevX := c.position.X
@@ -48,12 +48,14 @@ func (c *chopstick) DrawText(text ...string) {
 			c.Down()
 		case '\t':
 			for range 4 {
+				c.terminal.runeMatrix[c.position.Y][c.position.X] = r
 				Print(" ")
 				c.left()
 				c.Right()
 			}
 		default:
 			if unicode.IsPrint(r) {
+				c.terminal.runeMatrix[c.position.Y][c.position.X] = r
 				Printf("%s", string(r))
 				c.left()
 				c.Right()

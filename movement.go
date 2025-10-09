@@ -12,14 +12,14 @@ import (
 func (c *chopstick) Right() {
 	if c.IsAtEnd() {
 		if c.terminal.HasHorizontalWrap() {
-			debug.Printf("wrapping: %d\n", c.position.X)
+			Debug.Printf("wrapping: %d\n", c.position.X)
 			c.rightWithWrap()
 		}
-		debug.Printf("Right: %d\n", c.position.X)
+		Debug.Printf("Right: %d\n", c.position.X)
 		return
 	}
 	c.position.X++
-	debug.Printf("Right: %d\n", c.position.X)
+	Debug.Printf("Right: %d\n", c.position.X)
 	Print(RightArrow)
 }
 
@@ -52,12 +52,12 @@ func (c *chopstick) Left() {
 		if c.terminal.HasHorizontalWrap() {
 			c.leftWithWrap()
 		}
-		debug.Printf("Left: %d\n", c.position.X)
+		Debug.Printf("Left: %d\n", c.position.X)
 		return
 	}
 
 	c.position.X--
-	debug.Printf("Left: %d\n", c.position.X)
+	Debug.Printf("Left: %d\n", c.position.X)
 	Print(LeftArrow)
 }
 
@@ -92,12 +92,12 @@ func (c *chopstick) Up() {
 		if c.terminal.HasVerticalWrap() {
 			c.upWithWrap()
 		}
-		debug.Printf("Up: %d\n", c.position.Y)
+		Debug.Printf("Up: %d\n", c.position.Y)
 		return
 	}
 
 	c.position.Y--
-	debug.Printf("Up: %d\n", c.position.Y)
+	Debug.Printf("Up: %d\n", c.position.Y)
 	Print(UpArrow)
 }
 
@@ -125,13 +125,13 @@ func (c *chopstick) Down() {
 	if c.IsAtBottom() {
 		if c.terminal.HasVerticalWrap() {
 			c.downWithWrap()
-			debug.Printf("Down: %d\n", c.position.Y)
+			Debug.Printf("Down: %d\n", c.position.Y)
 		}
 		return
 	}
 
 	c.position.Y++
-	debug.Printf("Down: %d\n", c.position.Y)
+	Debug.Printf("Down: %d\n", c.position.Y)
 	Print(DownArrow)
 }
 

@@ -21,6 +21,7 @@ type code string
 
 type cshape string
 
+// The way the chopstick will apear in the terminal
 const (
 	Default           cshape = "\033[0 q"
 	SteadyBlock       cshape = "\033[1 q"
@@ -83,4 +84,9 @@ func (c chopstick) Show() {
 func (c *chopstick) UpdateTerminal(terminal terminal) {
 	c.terminal = terminal
 	c.StartOfPage()
+}
+
+// Pulls
+func (c *chopstick) GetValueUnderChopstick() string {
+	return string(c.terminal.runeMatrix[c.position.Y][c.position.X])
 }

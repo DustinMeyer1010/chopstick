@@ -10,24 +10,25 @@ import (
 
 func main() {
 	chopstick.LogInit()
+	/*
+			i1 := chopstick.Ingrident{
+				Position: chopstick.Position{X: 0, Y: 5},
+				Value:    "\033[1;32;41m          \033[0m",
+			}
 
-	i1 := chopstick.Ingrident{
-		Position: chopstick.Position{X: 0, Y: 5},
-		Value:    "\033[1;32;41m          \033[0m",
-	}
+			i2 := chopstick.Ingrident{
+				Position: chopstick.Position{X: 0, Y: 6},
+				Value:    "\033[1;32;41m          \033[0m",
+			}
 
-	i2 := chopstick.Ingrident{
-		Position: chopstick.Position{X: 0, Y: 6},
-		Value:    "\033[1;32;41m          \033[0m",
-	}
+			i3 := chopstick.Ingrident{
+				Position: chopstick.Position{X: 0, Y: 7},
+				Value:    "\033[1;32;41m          \033[0m",
+			}
 
-	i3 := chopstick.Ingrident{
-		Position: chopstick.Position{X: 0, Y: 7},
-		Value:    "\033[1;32;41m          \033[0m",
-	}
 
-	bento := chopstick.Bento{i1, i2, i3}
-
+		bento := chopstick.Bento{i1, i2, i3}
+	*/
 	ch := chopstick.NewChopstick().
 		Terminal(
 			chopstick.
@@ -50,7 +51,10 @@ func main() {
 		case "\033[D":
 			ch.Left()
 		case "u":
-			bento.Draw(&ch)
+			//bento.Draw(&ch)
+			ch.DrawText("hello world")
+		case "c":
+			chopstick.Debug.Println(ch.GetValueUnderChopstick())
 		default:
 			exit = false
 		}

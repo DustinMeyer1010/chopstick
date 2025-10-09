@@ -27,10 +27,13 @@ type terminal struct {
 	verticalWrap   bool
 	horizontalWrap bool
 	mode           mode
+	runeMatrix     Canvas
 	height         int
 	width          int
 	termState      *term.State
 }
+
+type Canvas [][]rune
 
 // Creates a new terimal
 //
@@ -50,15 +53,30 @@ func NewTerminal() terminal {
 		mode:           NORMAL,
 		verticalWrap:   false,
 		horizontalWrap: false,
+		runeMatrix:     makeMatrix(height, width),
 		termState:      termState,
 	}
+}
+
+func makeMatrix(height, width int) Canvas {
+	RuneMatrix := make([][]rune, height) // make the outer slice with 'height' rows
+	for y := range RuneMatrix {
+		row := make([]rune, width)
+		for x := range row {
+			row[x] = ' '
+		}
+		RuneMatrix[y] = row // make each row with 'width' columns
+	}
+
+	return RuneMatrix
 }
 
 // Set the height of the terminal
 //
 // If N is greater than terminal height default to terminal height
 func (t terminal) Height(n int) terminal {
-	t.height = min(n-OFFSET, t.height-OFFSET)
+	t.height = min(n, t.height) - OFFSET
+	t.runeMatrix = makeMatrix(t.height+OFFSET, t.width+OFFSET)
 	return t
 }
 
@@ -66,7 +84,8 @@ func (t terminal) Height(n int) terminal {
 //
 // If N is greater than terminal height default to terminal width
 func (t terminal) Width(n int) terminal {
-	t.width = min(n-OFFSET, t.width-OFFSET)
+	t.width = min(n, t.width) - OFFSET
+	t.runeMatrix = makeMatrix(t.height+OFFSET, t.width+OFFSET)
 	return t
 }
 
