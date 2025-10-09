@@ -31,7 +31,9 @@ stick.Up()
 For saving a specific design and drawing it whenever needed
 
 ### Ingredients
-1. Create an Ingridant & chopstick
+Create a single item to draw in the terminal
+
+1. Create an Ingredients & chopstick
     ```go
     stick := chopstick.NewChopstick()
     redbar :=chopstick.Ingredients{
@@ -39,8 +41,46 @@ For saving a specific design and drawing it whenever needed
             Value:    "\033[1;32;41m          \033[0m",
         }
     ```
-2. Draw Ingridant giving it the chopsticks
+2. Draw Ingredients giving it the chopsticks
     ```go
     redbar.Draw(&stick)
     ```
     <img src="Ingredient.gif" width="300" alt="Ingredient Example">
+
+
+### Bento
+Combine a bunch of Ingredients to draw all at once
+
+1. Create all your Ingredients 
+    ```go
+      stick := chopstick.NewChopstick().
+      Terminal(
+        chopstick.NewTerminal().ALTERNATE(),
+        ).
+        Shape(chopstick.BlinkingBar)
+
+      redbar := chopstick.Ingredients{
+        Position: chopstick.Position{X: 2, Y: 5},
+        Value:    "\033[1;32;41m         \033[0m",
+      }
+      redbar1 := chopstick.Ingredients{
+        Position: chopstick.Position{X: 1, Y: 6},
+        Value:    "\033[1;32;41m           \033[0m",
+      }
+      redbar2 := chopstick.Ingredients{
+        Position: chopstick.Position{X: 1, Y: 7},
+        Value:    "\033[1;32;41m           \033[0m",
+      }
+      redbar3 := chopstick.Ingredients{
+        Position: chopstick.Position{X: 2, Y: 8},
+        Value:    "\033[1;32;41m         \033[0m",
+      }
+
+      bento := chopstick.Bento{redbar, redbar1, redbar2, redbar3}
+    ```
+
+2. Draw the bento
+    ```go
+    bento.Draw(&stick)
+    ```
+    <img src="bento.gif" width="300" alt="Ingredient Example">
