@@ -1,7 +1,7 @@
 package chopstick
 
 type Element struct {
-	value    rune
+	Value    rune
 	MetaData any
 }
 
@@ -12,7 +12,7 @@ func makeCanvas(height, width int) canvas {
 	for y := range canvas {
 		row := make([]Element, width)
 		for x := range row {
-			row[x].value = ' '
+			row[x].Value = ' '
 		}
 		canvas[y] = row // make each row with 'width' columns
 	}
@@ -30,7 +30,7 @@ func (c *canvas) setMetaData(p Position, metadata any) {
 
 // Set the value for the current position
 func (c *canvas) setValue(p Position, value rune) {
-	(*c)[p.Y][p.X].value = value
+	(*c)[p.Y][p.X].Value = value
 }
 
 // Set the element at a given location
@@ -40,7 +40,7 @@ func (c *canvas) setElement(p Position, element Element) {
 
 // Returns Value at given position
 func (c canvas) getValue(p Position) string {
-	return string(c[p.Y][p.Y].value)
+	return string(c[p.Y][p.Y].Value)
 }
 
 // Returns metadata at given position

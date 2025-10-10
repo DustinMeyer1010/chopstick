@@ -138,7 +138,7 @@ func (c *chopstick) SetElementAtLocation(p Position, element Element) error {
 	c.terminal.canvas.setElement(p, element)
 	prevPosition := Position{X: c.position.X, Y: c.position.Y}
 	c.MoveTo(p)
-	c.DrawText(string(element.value))
+	c.Draw(string(element.Value))
 	c.MoveTo(prevPosition)
 	return nil
 }
@@ -146,9 +146,7 @@ func (c *chopstick) SetElementAtLocation(p Position, element Element) error {
 // Sets element under chopstick
 func (c *chopstick) SetElementAtChopstick(element Element) {
 	c.terminal.canvas.setElement(c.position, element)
-	prevPosition := Position{X: c.position.X, Y: c.position.Y}
-	c.DrawText(string(element.value))
-	c.MoveTo(prevPosition)
+	c.DrawWithReturn(string(element.Value))
 }
 
 // Returns the current position of the chopstick
@@ -164,6 +162,10 @@ func (c *chopstick) GetX() int {
 // Get the current Y position of the chopstick
 func (c *chopstick) GetY() int {
 	return c.position.Y
+}
+
+func (c *chopstick) GetKeyPressed() string {
+	return c.terminal.GetKeyPressed()
 }
 
 // Position of the chopstick

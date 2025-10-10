@@ -2,13 +2,12 @@ package chopstick
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 	"unicode"
 	"unicode/utf8"
 )
 
-var ansiRegex = regexp.MustCompile(`\x1b\[[0-9;]*m`)
+//var ansiRegex = regexp.MustCompile(`\x1b\[[0-9;]*m`)
 
 // TODO:
 //   - Refactor the function to make it short and readable
@@ -16,7 +15,7 @@ var ansiRegex = regexp.MustCompile(`\x1b\[[0-9;]*m`)
 //   - Does not support UTF-8 Character in terminal (Two columns in length rather than one)??????
 //
 // Draw Text to screen ansi character are ignored
-func (c *chopstick) DrawText(text ...string) {
+func (c *chopstick) Draw(text ...string) {
 	printString := strings.Join(text, "")
 
 	inEscape := false
@@ -68,11 +67,11 @@ func (c *chopstick) DrawText(text ...string) {
 	}
 }
 
-// Samething as DrawText but return cursor to orginal position before drawing text
-func (c *chopstick) DrawTextWithReturn(text ...string) {
+// Draw the text
+func (c *chopstick) DrawWithReturn(text ...string) {
 	prevX := c.position.X
 	prevY := c.position.Y
-	c.DrawText(text...)
+	c.Draw(text...)
 	c.MoveTo(Position{X: prevX, Y: prevY})
 }
 

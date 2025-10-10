@@ -11,7 +11,7 @@ type Ingredients struct {
 // Note: Leaves chopstick at end of drawing
 func (i *Ingredients) Draw(c *chopstick) {
 	c.MoveTo(i.Position)
-	c.DrawText(i.Value)
+	c.Draw(i.Value)
 }
 
 // Draws the ingredient
@@ -20,6 +20,6 @@ func (i *Ingredients) Draw(c *chopstick) {
 func (i *Ingredients) DrawWithReturn(c *chopstick) {
 	prevPosition := Position{X: c.position.X, Y: c.position.Y}
 	c.MoveTo(i.Position)
-	c.DrawText(i.Value)
+	c.Draw(i.Value)
 	c.MoveTo(prevPosition)
 }

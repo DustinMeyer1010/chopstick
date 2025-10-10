@@ -104,6 +104,11 @@ func (t terminal) ALTERNATE() terminal {
 	return t
 }
 
+func (t terminal) LineWrap() terminal {
+	t.lineWrap = true
+	return t
+}
+
 // Check for vertical wrap is on
 func (t terminal) HasVerticalWrap() bool {
 	return t.verticalWrap
@@ -116,6 +121,21 @@ func (t terminal) HasHorizontalWrap() bool {
 
 func (t terminal) HasLineWrap() bool {
 	return t.lineWrap
+}
+
+func (t terminal) GetKeyPressed() string {
+	var buf = make([]byte, 3)
+	n, err := os.Stdin.Read(buf)
+
+	if err != nil {
+		panic(err)
+	}
+
+	if n == 0 {
+		return string("")
+	}
+
+	return string(buf[:n])
 }
 
 // For getting the current terminal size
