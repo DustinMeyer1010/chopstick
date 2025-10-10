@@ -33,22 +33,22 @@ func (c *canvas) setValue(p Position, value rune) {
 	(*c)[p.Y][p.X].value = value
 }
 
-// Get the value at the given position
+// Set the element at a given location
+func (c *canvas) setElement(p Position, element Element) {
+	(*c)[p.Y][p.X] = element
+}
+
+// Returns Value at given position
 func (c canvas) getValue(p Position) string {
 	return string(c[p.Y][p.Y].value)
 }
 
-// Get the metadata at the given position
+// Returns metadata at given position
 func (c canvas) getMetaData(p Position) any {
 	return c[p.Y][p.X].MetaData
 }
 
-// Get the full element at the current position
+// Returns element at given position
 func (c canvas) getElement(p Position) *Element {
 	return &c[p.Y][p.X]
-}
-
-// Set the element at a given location
-func (c *canvas) setElement(p Position, element Element) {
-	(*c)[p.Y][p.X] = element
 }

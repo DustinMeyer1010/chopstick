@@ -4,25 +4,31 @@ import (
 	"fmt"
 )
 
-// Moves chopstick to the right
-//
-// Wrap: Chopstick will move down and to start of line
-//
-// NoWrap: Chopstick will stop at end of line
+// Move Chopstick to right in terminal
 func (c *chopstick) Right() {
-	if c.IsAtEnd() {
-		if c.terminal.HasHorizontalWrap() {
-			c.rightWithWrap()
-		}
+
+	if !c.IsAtEnd() {
+		c.position.X++
+		Print(RightArrow)
 		return
 	}
-	c.position.X++
-	Print(RightArrow)
+
+	switch {
+	case c.terminal.HasLineWrap():
+		c.rightWithLineWrap()
+	case c.terminal.HasHorizontalWrap():
+		c.rightWithHorizontalWrap()
+	}
 }
 
-// Handles wrapping of right in terminal
-func (c *chopstick) rightWithWrap() {
+// Wraps the chopstick down & to start of line
+func (c *chopstick) rightWithLineWrap() {
 	c.Down()
+	c.StartOfLine()
+}
+
+// Wraps the copstick back to start of line
+func (c *chopstick) rightWithHorizontalWrap() {
 	c.StartOfLine()
 }
 
@@ -39,28 +45,31 @@ func (c *chopstick) RightN(n int) {
 	}
 }
 
-// Moves Chopstick to the left
-//
-// Wrap: Chopstick will move to up and end of line
-//
-// NoWrap: Chopstick will stop at start of line
+// Moves Chopstick left in terminal
 func (c *chopstick) Left() {
-	if c.IsAtStart() {
-		if c.terminal.HasHorizontalWrap() {
-			c.leftWithWrap()
-		}
+	if !c.IsAtStart() {
+		c.position.X--
+		Print(LeftArrow)
 		return
 	}
 
-	c.position.X--
-	Print(LeftArrow)
+	switch {
+	case c.terminal.HasLineWrap():
+		c.leftWithLineWrap()
+	case c.terminal.HasHorizontalWrap():
+		c.leftWithHorizontalWrap()
+	}
 }
 
-// Handles wrapping of left in terminal
-func (c *chopstick) leftWithWrap() {
+// Wraps chopstick up & to end of line
+func (c *chopstick) leftWithLineWrap() {
 	c.Up()
 	c.EndOfLine()
-	c.position.X = c.terminal.width
+}
+
+// Wraps chopstick to end of line
+func (c *chopstick) leftWithHorizontalWrap() {
+	c.EndOfLine()
 }
 
 // TODO:
@@ -71,33 +80,28 @@ func (c *chopstick) LeftN(n int) {
 	}
 }
 
-// Move chopstick without changing position of x
+// Move chopstick without changing position of x (Used for printing character which move the chopstick on it own)
 func (c *chopstick) left() {
 	Print(LeftArrow)
 }
 
-// Moves Chopstick Up
-//
-// Wrap: Chopstick will move bottom of page and keep current x
-//
-// NoWrap: Chopstick will stop at top of terminal
+// Moves the chopstick up in terminal
 func (c *chopstick) Up() {
 
-	if c.IsAtTop() {
-		if c.terminal.HasVerticalWrap() {
-			c.upWithWrap()
-		}
+	if !c.IsAtTop() {
+		c.position.Y--
+		Print(UpArrow)
 		return
 	}
 
-	c.position.Y--
-	Print(UpArrow)
+	if c.terminal.HasVerticalWrap() {
+		c.upWithVerticalWrap()
+	}
 }
 
-// Handles wrapping of up in terminal
-func (c *chopstick) upWithWrap() {
+// Wraps chopstick back to bottom
+func (c *chopstick) upWithVerticalWrap() {
 	c.Bottom()
-	c.position.Y = c.terminal.height
 }
 
 // TODO:
@@ -115,20 +119,21 @@ func (c *chopstick) UpN(n int) {
 // NoWrap: Chopstick will stop at bottom of terminal
 func (c *chopstick) Down() {
 
-	if c.IsAtBottom() {
-		if c.terminal.HasVerticalWrap() {
-			c.downWithWrap()
-		}
+	if !c.IsAtBottom() {
+
+		c.position.Y++
+		Print(DownArrow)
 		return
 	}
 
-	c.position.Y++
-	Print(DownArrow)
+	if c.terminal.HasVerticalWrap() {
+		c.downWithVerticalWrap()
+	}
+
 }
 
 // Handles wrapping of down in terminal
-func (c *chopstick) downWithWrap() {
-	c.position.Y = 0
+func (c *chopstick) downWithVerticalWrap() {
 	c.Top()
 }
 
@@ -140,22 +145,22 @@ func (c *chopstick) DownN(n int) {
 	}
 }
 
-// If chopstick at top of terminal returns True
+// check for chopstick if at top of terminal
 func (c chopstick) IsAtTop() bool {
 	return c.position.Y <= 0
 }
 
-// If chopstick at bottom of terminal returns True
+// check for chopstick if at bottom of terminal
 func (c chopstick) IsAtBottom() bool {
 	return c.position.Y >= c.terminal.height
 }
 
-// If chopstick at end of line returns True
+// check for chopstick if at end of terminal
 func (c chopstick) IsAtEnd() bool {
 	return c.position.X >= c.terminal.width
 }
 
-// If chopstick at start of line returns True
+// check for chopstick if at start of terminal
 func (c chopstick) IsAtStart() bool {
 	return c.position.X <= 0
 }
@@ -189,11 +194,13 @@ func (c *chopstick) EndOfPage() {
 // Moves chopstick to top of page keeping x
 func (c *chopstick) Top() {
 	fmt.Printf("\033[%dA", c.terminal.height-c.position.Y)
+	c.position.Y = 0
 }
 
 // Moves chopstick to bottom of page keeping x
 func (c *chopstick) Bottom() {
 	fmt.Printf("\033[%dB", c.terminal.height-c.position.Y)
+	c.position.Y = c.terminal.height
 }
 
 // Move to any cordinate

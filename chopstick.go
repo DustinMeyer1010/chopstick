@@ -70,7 +70,7 @@ func (c chopstick) Hide() {
 	Print(Hide)
 }
 
-// Shows the copstick
+// Shows the chopstick
 func (c chopstick) Show() {
 	Print(Show)
 }
@@ -81,17 +81,20 @@ func (c *chopstick) UpdateTerminal(t terminal) {
 	c.StartOfPage()
 }
 
-// Get the metadata under the chopstick
+// Returns the metadata under the chopstick
 func (c *chopstick) GetValueUnderChopstick() string {
 	return c.terminal.canvas.getValue(c.position)
 }
 
+// Return element under the chopstick
 func (c *chopstick) GetElementUnderChopstick() *Element {
 	element := c.terminal.canvas.getElement(c.position)
 	return element
 }
 
-// Get the element from the given position return an error if position is outside of bounds
+// Return value at specific location
+//
+// If position outside of terminal bounds will throw error
 func (c *chopstick) GetValueAtLocation(p Position) (string, error) {
 	if p.OutOfBounds(*c) {
 		return "", fmt.Errorf("invalid position")
@@ -99,7 +102,9 @@ func (c *chopstick) GetValueAtLocation(p Position) (string, error) {
 	return c.terminal.canvas.getValue(p), nil
 }
 
-// Get the elemen
+// Return element at specific location
+//
+// If position outside of terminal bounds will throw error
 func (c *chopstick) GetElementAtLocation(p Position) (*Element, error) {
 	if p.OutOfBounds(*c) {
 		return nil, fmt.Errorf("invalid position")
@@ -107,18 +112,9 @@ func (c *chopstick) GetElementAtLocation(p Position) (*Element, error) {
 	return c.terminal.canvas.getElement(p), nil
 }
 
-// Position of the chopstick
-type Position struct {
-	X int
-	Y int
-}
-
-// Checks to make sure position is within bounds of the terminal width and height
-func (p Position) OutOfBounds(c chopstick) bool {
-	return p.X > c.terminal.width || p.Y > c.terminal.height || p.Y < 0 || p.X < 0
-}
-
 // Set metadata for a specific location
+//
+// If position outside of terminal bounds will throw error
 func (c *chopstick) SetMetaDataAtLocation(p Position, metadata any) error {
 	if p.OutOfBounds(*c) {
 		return fmt.Errorf("invalid position")
@@ -127,12 +123,14 @@ func (c *chopstick) SetMetaDataAtLocation(p Position, metadata any) error {
 	return nil
 }
 
-// Get metadata for the colum and row that the chopstick is on
+// Returns metadata for element under the chopstick
 func (c *chopstick) GetMetaDataAtChopstick() any {
 	return c.terminal.canvas.getMetaData(c.position)
 }
 
 // Set an element at a specific location
+//
+// If position outside of terminal bounds will throw error
 func (c *chopstick) SetElementAtLocation(p Position, element Element) error {
 	if p.OutOfBounds(*c) {
 		return fmt.Errorf("invalid position")
@@ -143,6 +141,14 @@ func (c *chopstick) SetElementAtLocation(p Position, element Element) error {
 	c.DrawText(string(element.value))
 	c.MoveTo(prevPosition)
 	return nil
+}
+
+// Sets element under chopstick
+func (c *chopstick) SetElementAtChopstick(element Element) {
+	c.terminal.canvas.setElement(c.position, element)
+	prevPosition := Position{X: c.position.X, Y: c.position.Y}
+	c.DrawText(string(element.value))
+	c.MoveTo(prevPosition)
 }
 
 // Returns the current position of the chopstick
@@ -158,4 +164,15 @@ func (c *chopstick) GetX() int {
 // Get the current Y position of the chopstick
 func (c *chopstick) GetY() int {
 	return c.position.Y
+}
+
+// Position of the chopstick
+type Position struct {
+	X int
+	Y int
+}
+
+// Checks to make sure position is within bounds of the terminal width and height
+func (p Position) OutOfBounds(c chopstick) bool {
+	return p.X > c.terminal.width || p.Y > c.terminal.height || p.Y < 0 || p.X < 0
 }

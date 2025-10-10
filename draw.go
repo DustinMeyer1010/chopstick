@@ -76,27 +76,30 @@ func (c *chopstick) DrawTextWithReturn(text ...string) {
 	c.MoveTo(Position{X: prevX, Y: prevY})
 }
 
-// Erase the Entire terminal
+// TODO:
+// - Clear the canvas as previous elements will still be at those locations
+
+// Clear the Entire terminal
 func (c *chopstick) ClearTerminal() {
 	Print(EraseEntireTerminal)
 }
 
-// Erase from chopstick to end of terminal
+// Clear from chopstick to end of terminal
 func (c *chopstick) ClearToEndOfTermial() {
 	Print(EraseToEndOfTerminal)
 }
 
-// Erase from chopstick to Start of terminal
+// Clear from chopstick to Start of terminal
 func (c *chopstick) ClearToStartOfTerminal() {
 	Print(EraseToStartOfTerminal)
 }
 
-// Erase from chopstick to Start of line
+// Clear from chopstick to Start of line
 func (c *chopstick) ClearToStartOfLine() {
 	Print(EraseToStartOfLine)
 }
 
-// Erase from chopstick to End of line
+// Clear from chopstick to End of line
 func (c *chopstick) ClearToEndOfLine() {
 	Print(EraseToEndOfLine)
 }

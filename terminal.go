@@ -13,24 +13,26 @@ const (
 	OFFSET = 1 // For the terminal starting at 0 and not one
 )
 
+// Different modes that the terminal will be in
 const (
 	NORMAL mode = iota
 	ALTERNATE
 )
 
 const (
-	ALTERNATE_START = "\033[?1049h"
-	ALTERNATE_EXIT  = "\033[?1049l"
+	ALTERNATE_START = "\033[?1049h" // Enter Alternate Mode
+	ALTERNATE_EXIT  = "\033[?1049l" // Exits Alternate Mode
 )
 
 type terminal struct {
-	verticalWrap   bool
-	horizontalWrap bool
-	mode           mode
-	canvas         canvas
-	height         int
-	width          int
-	termState      *term.State
+	verticalWrap   bool        // Chopstick should wrap around top and bottom of terminal
+	horizontalWrap bool        // Chopstick will wrap around the same line
+	lineWrap       bool        // Chopstill wrap around to next line
+	mode           mode        // What mode the termianl is going to be in (ALTERNATE OR ORGINAL)
+	canvas         canvas      // Track location of thing printed in terminal
+	height         int         // Height of the terminal
+	width          int         // Width of the terminal
+	termState      *term.State // Terminal state (Only used for return from rawMode)
 }
 
 // Creates a new terimal
@@ -42,6 +44,7 @@ type terminal struct {
 //	Mode: Normal Mode
 //	VerticalWrap: False
 //	HorizontalWrap: False
+//	LineWrap: False
 func NewTerminal() terminal {
 	height, width := getTerminalSize()
 	termState, _ := term.MakeRaw(int(os.Stdin.Fd()))
@@ -51,6 +54,7 @@ func NewTerminal() terminal {
 		mode:           NORMAL,
 		verticalWrap:   false,
 		horizontalWrap: false,
+		lineWrap:       false,
 		canvas:         makeCanvas(height, width),
 		termState:      termState,
 	}
@@ -58,7 +62,7 @@ func NewTerminal() terminal {
 
 // Set the height of the terminal
 //
-// If N is greater than terminal height default to terminal height
+// Sets height to Min(n, terminal_height)
 func (t terminal) Height(n int) terminal {
 	t.height = min(n, t.height) - OFFSET
 	t.canvas = makeCanvas(t.height+OFFSET, t.width+OFFSET)
@@ -67,50 +71,54 @@ func (t terminal) Height(n int) terminal {
 
 // Set the width of the terminal
 //
-// If N is greater than terminal height default to terminal width
+// Sets width to min(n, terminal_width)
 func (t terminal) Width(n int) terminal {
 	t.width = min(n, t.width) - OFFSET
 	t.canvas = makeCanvas(t.height+OFFSET, t.width+OFFSET)
 	return t
 }
 
-// Set terminal for nowrapping of lines
+// Turns on vertical wrapping for terminal
 func (t terminal) VerticalWrap() terminal {
 	t.verticalWrap = true
 	return t
 }
 
-// Set terminal to wrap lines
+// Turns on Horizontal wrapping for terminal
 func (t terminal) HorizontalWrap() terminal {
 	t.horizontalWrap = true
 	return t
 }
 
-// Set terminal to normal mode
+// Set terminal to Normal Mode
 func (t terminal) Normal() terminal {
 	print(ALTERNATE_EXIT)
 	t.mode = NORMAL
 	return t
 }
 
-// Set terminal to alternate mode
+// Set terminal to Alternate Mode
 func (t terminal) ALTERNATE() terminal {
 	print(ALTERNATE_START)
 	t.mode = ALTERNATE
 	return t
 }
 
-// Returns True is vertical wrap for terminal is on
+// Check for vertical wrap is on
 func (t terminal) HasVerticalWrap() bool {
 	return t.verticalWrap
 }
 
-// Returns False if horizontal wrap for terminal is on
+// Check for Horizontal wrap is on
 func (t terminal) HasHorizontalWrap() bool {
 	return t.horizontalWrap
 }
 
-// Retrieves the current terminal size
+func (t terminal) HasLineWrap() bool {
+	return t.lineWrap
+}
+
+// For getting the current terminal size
 func getTerminalSize() (int, int) {
 	width, height, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
