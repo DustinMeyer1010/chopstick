@@ -29,10 +29,6 @@ func main() {
 				Width(20),        // Set the max width of terminal to 20
 		).
 		Shape(chopstick.SteadyBlock) // Changes the shape of the chopstick
-	fmt.Print(RightArrow)
-	fmt.Print(RightArrow)
-	fmt.Print(RightArrow)
-	fmt.Print(DownArrow)
 	exit := true
 	for exit {
 		switch key := stick.GetKeyPressed(); Key(key) {
