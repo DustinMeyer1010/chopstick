@@ -52,3 +52,62 @@ func (c canvas) getMetaData(p Position) any {
 func (c canvas) getElement(p Position) *Element {
 	return &c[p.Y][p.X]
 }
+
+func (c *canvas) ClearCanvas() {
+	for y := range *c {
+		for x := range (*c)[y] {
+			(*c)[y][x] = Element{Value: ' '}
+		}
+	}
+}
+
+// Clear the canvas from position given to end of canvas
+func (c *canvas) ClearToEndOfCanvas(p Position) {
+	for y := range *c {
+		if y >= p.Y {
+			for x := range (*c)[y] {
+				if x >= p.X {
+					(*c)[y][x] = Element{Value: ' '}
+				}
+			}
+		}
+	}
+}
+
+// Clears the canvas from position give to start of canvas
+func (c *canvas) ClearToStartOfCanvas(p Position) {
+	for y := range *c {
+		if y <= p.Y {
+			for x := range (*c)[y] {
+				if x <= p.X {
+					(*c)[y][x] = Element{Value: ' '}
+				}
+			}
+		}
+	}
+}
+
+// Clears the canvas for position give to start of row of canvas
+func (c *canvas) ClearToStartOfLineCanvas(p Position) {
+	for x := range (*c)[p.Y] {
+		if x <= p.X {
+			(*c)[p.Y][x] = Element{Value: ' '}
+		}
+	}
+}
+
+// Clears the canvas for position give to end of row of canvas
+func (c *canvas) ClearToEndOfLineCanvas(p Position) {
+	for x := range (*c)[p.Y] {
+		if x >= p.X {
+			(*c)[p.Y][x] = Element{Value: ' '}
+		}
+	}
+}
+
+// Clears the canvas for entire row of the position it is at
+func (c *canvas) ClearLineCanvas(p Position) {
+	for x := range (*c)[p.Y] {
+		(*c)[p.Y][x] = Element{Value: ' '}
+	}
+}

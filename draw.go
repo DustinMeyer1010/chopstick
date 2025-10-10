@@ -80,25 +80,35 @@ func (c *chopstick) DrawWithReturn(text ...string) {
 
 // Clear the Entire terminal
 func (c *chopstick) ClearTerminal() {
-	Print(EraseEntireTerminal)
+	Print(ClearEntireTerminal)
+	c.terminal.canvas.ClearCanvas()
 }
 
 // Clear from chopstick to end of terminal
 func (c *chopstick) ClearToEndOfTermial() {
-	Print(EraseToEndOfTerminal)
+	Print(ClearToEndOfTerminal)
+	c.terminal.canvas.ClearToEndOfCanvas(c.position)
 }
 
 // Clear from chopstick to Start of terminal
 func (c *chopstick) ClearToStartOfTerminal() {
-	Print(EraseToStartOfTerminal)
+	Print(ClearToStartOfTerminal)
+	c.terminal.canvas.ClearToStartOfCanvas(c.position)
 }
 
 // Clear from chopstick to Start of line
 func (c *chopstick) ClearToStartOfLine() {
-	Print(EraseToStartOfLine)
+	Print(ClearToStartOfLine)
+	c.terminal.canvas.ClearToStartOfLineCanvas(c.position)
 }
 
 // Clear from chopstick to End of line
 func (c *chopstick) ClearToEndOfLine() {
-	Print(EraseToEndOfLine)
+	Print(ClearToEndOfLine)
+	c.terminal.canvas.ClearToEndOfLineCanvas(c.position)
+}
+
+func (c *chopstick) ClearLine() {
+	Print(ClearEntireLine)
+	c.terminal.canvas.ClearLineCanvas(c.position)
 }

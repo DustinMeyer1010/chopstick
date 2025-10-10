@@ -72,8 +72,13 @@ func (c *chopstick) leftWithHorizontalWrap() {
 	c.EndOfLine()
 }
 
-// TODO:
-//   - Comment
+// LeftN moves the chopstick to the right n times.
+//
+// Note: Wrapping is included in the count. This means if the terminal width
+// is 10, calling LeftN(10) will move the chopstick to the end of the current line,
+// while LeftN(11) will move it to the start of the next line (after wrapping).
+//
+// If no wrap then n will just stop at end of line or width of the terminal
 func (c *chopstick) LeftN(n int) {
 	for range n {
 		c.Left()
@@ -104,19 +109,20 @@ func (c *chopstick) upWithVerticalWrap() {
 	c.Bottom()
 }
 
-// TODO:
-//   - Comment
+// UpN moves the chopstick to the right n times.
+//
+// Note: Wrapping is included in the count. This means if the terminal width
+// is 10, calling UpN(10) will move the chopstick to the end of the current line,
+// while UpN(11) will move it to the start of the next line (after wrapping).
+//
+// If no wrap then n will just stop at end of line or width of the terminal
 func (c *chopstick) UpN(n int) {
 	for range n {
 		c.Up()
 	}
 }
 
-// Moves Chopstick Down
-//
-// Wrap: Chopstick will move top of page and keep current x
-//
-// NoWrap: Chopstick will stop at bottom of terminal
+// Move the chopstick Down
 func (c *chopstick) Down() {
 
 	if !c.IsAtBottom() {
@@ -137,8 +143,13 @@ func (c *chopstick) downWithVerticalWrap() {
 	c.Top()
 }
 
-// TODO:
-//   - Comment
+// DownN moves the chopstick to the right n times.
+//
+// Note: Wrapping is included in the count. This means if the terminal width
+// is 10, calling DownN(10) will move the chopstick to the end of the current line,
+// while DownN(11) will move it to the start of the next line (after wrapping).
+//
+// If no wrap then n will just stop at end of line or width of the terminal
 func (c *chopstick) DownN(n int) {
 	for range n {
 		c.Down()

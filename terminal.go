@@ -104,6 +104,7 @@ func (t terminal) ALTERNATE() terminal {
 	return t
 }
 
+// Turns on line wrap for terminal
 func (t terminal) LineWrap() terminal {
 	t.lineWrap = true
 	return t
@@ -119,10 +120,12 @@ func (t terminal) HasHorizontalWrap() bool {
 	return t.horizontalWrap
 }
 
+// Check for Line wrap is on
 func (t terminal) HasLineWrap() bool {
 	return t.lineWrap
 }
 
+// Get the key that was pressed
 func (t terminal) GetKeyPressed() string {
 	var buf = make([]byte, 3)
 	n, err := os.Stdin.Read(buf)

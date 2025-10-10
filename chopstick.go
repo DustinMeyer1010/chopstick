@@ -37,12 +37,12 @@ const (
 	DownArrow              code = "\033[B"    // Moves chopstick down
 	UpArrow                code = "\033[A"    // Moves chopstick up
 	Return                 code = "\r"        // Returns to start of line
-	EraseToEndOfTerminal   code = "\033[0J"   // Erase from chopstick to end of page
-	EraseToStartOfTerminal code = "\033[1J"   // Erase from chopstick to start of page
-	EraseEntireTerminal    code = "\033[2J"   // Erase entire screen
-	EraseToEndOfLine       code = "\033[0K"   // Erase from chopstick to end of line
-	EraseToStartOfLine     code = "\033[1K"   // Erase from chopstick to start of line
-	EraseEntireLine        code = "\033[2K"   // Erase entire line chopstick is on
+	ClearToEndOfTerminal   code = "\033[0J"   // Erase from chopstick to end of page
+	ClearToStartOfTerminal code = "\033[1J"   // Erase from chopstick to start of page
+	ClearEntireTerminal    code = "\033[2J"   // Erase entire screen
+	ClearToEndOfLine       code = "\033[0K"   // Erase from chopstick to end of line
+	ClearToStartOfLine     code = "\033[1K"   // Erase from chopstick to start of line
+	ClearEntireLine        code = "\033[2K"   // Erase entire line chopstick is on
 )
 
 // Creates a new chopstick
