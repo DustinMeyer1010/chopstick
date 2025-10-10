@@ -8,7 +8,7 @@ import (
 var Debug *log.Logger
 
 func LogInit() {
-	f, err := os.OpenFile("Debug.log", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0664)
+	f, err := os.OpenFile("./logs/debug.log", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0664)
 	if err != nil {
 		log.Fatal("Error opening log file", err)
 		os.Exit(1)

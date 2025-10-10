@@ -5,11 +5,6 @@ import "fmt"
 var Print = fmt.Print
 var Printf = fmt.Printf
 
-type Position struct {
-	X int
-	Y int
-}
-
 // Cursor aka Chopstick
 type chopstick struct {
 	position Position
@@ -44,7 +39,7 @@ const (
 	Return                 code = "\r"        // Returns to start of line
 	EraseToEndOfTerminal   code = "\033[0J"   // Erase from chopstick to end of page
 	EraseToStartOfTerminal code = "\033[1J"   // Erase from chopstick to start of page
-	EraseEntireTerminal    code = "\033[3J"   // Erase entire screen
+	EraseEntireTerminal    code = "\033[2J"   // Erase entire screen
 	EraseToEndOfLine       code = "\033[0K"   // Erase from chopstick to end of line
 	EraseToStartOfLine     code = "\033[1K"   // Erase from chopstick to start of line
 	EraseEntireLine        code = "\033[2K"   // Erase entire line chopstick is on
@@ -81,12 +76,86 @@ func (c chopstick) Show() {
 }
 
 // Update the terminal
-func (c *chopstick) UpdateTerminal(terminal terminal) {
-	c.terminal = terminal
+func (c *chopstick) UpdateTerminal(t terminal) {
+	c.terminal = t
 	c.StartOfPage()
 }
 
-// Pulls
+// Get the metadata under the chopstick
 func (c *chopstick) GetValueUnderChopstick() string {
-	return string(c.terminal.runeMatrix[c.position.Y][c.position.X])
+	return c.terminal.canvas.getValue(c.position)
+}
+
+func (c *chopstick) GetElementUnderChopstick() *Element {
+	element := c.terminal.canvas.getElement(c.position)
+	return element
+}
+
+// Get the element from the given position return an error if position is outside of bounds
+func (c *chopstick) GetValueAtLocation(p Position) (string, error) {
+	if p.OutOfBounds(*c) {
+		return "", fmt.Errorf("invalid position")
+	}
+	return c.terminal.canvas.getValue(p), nil
+}
+
+// Get the elemen
+func (c *chopstick) GetElementAtLocation(p Position) (*Element, error) {
+	if p.OutOfBounds(*c) {
+		return nil, fmt.Errorf("invalid position")
+	}
+	return c.terminal.canvas.getElement(p), nil
+}
+
+// Position of the chopstick
+type Position struct {
+	X int
+	Y int
+}
+
+// Checks to make sure position is within bounds of the terminal width and height
+func (p Position) OutOfBounds(c chopstick) bool {
+	return p.X > c.terminal.width || p.Y > c.terminal.height || p.Y < 0 || p.X < 0
+}
+
+// Set metadata for a specific location
+func (c *chopstick) SetMetaDataAtLocation(p Position, metadata any) error {
+	if p.OutOfBounds(*c) {
+		return fmt.Errorf("invalid position")
+	}
+	c.terminal.canvas.setMetaData(p, metadata)
+	return nil
+}
+
+// Get metadata for the colum and row that the chopstick is on
+func (c *chopstick) GetMetaDataAtChopstick() any {
+	return c.terminal.canvas.getMetaData(c.position)
+}
+
+// Set an element at a specific location
+func (c *chopstick) SetElementAtLocation(p Position, element Element) error {
+	if p.OutOfBounds(*c) {
+		return fmt.Errorf("invalid position")
+	}
+	c.terminal.canvas.setElement(p, element)
+	prevPosition := Position{X: c.position.X, Y: c.position.Y}
+	c.MoveTo(p)
+	c.DrawText(string(element.value))
+	c.MoveTo(prevPosition)
+	return nil
+}
+
+// Returns the current position of the chopstick
+func (c *chopstick) GetPosition() Position {
+	return c.position
+}
+
+// Get the current X positon of the chopstick
+func (c *chopstick) GetX() int {
+	return c.position.X
+}
+
+// Get the current Y position of the chopstick
+func (c *chopstick) GetY() int {
+	return c.position.Y
 }

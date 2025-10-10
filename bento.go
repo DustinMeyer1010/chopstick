@@ -1,15 +1,15 @@
 package chopstick
 
-// Collection of ingridents to build a element or UI
+// Collection of ingredients to build a element or UI
 type Bento []Ingredients
 
-// Item to draw on the screen and where it will be drawn
-type Ingredients struct {
-	Position Position
-	Value    string
+// Create a new Bento with all the ingredients
+func NewBento(ingredients ...Ingredients) Bento {
+	return Bento(ingredients)
 }
 
-func (b *Bento) Draw(c *chopstick) {
+// Draws the bento but returns chopstick to orginal position
+func (b *Bento) DrawWithReturn(c *chopstick) {
 	prevPosition := Position{c.position.X, c.position.Y}
 	for _, i := range *b {
 		i.Draw(c)
@@ -17,7 +17,9 @@ func (b *Bento) Draw(c *chopstick) {
 	c.MoveTo(prevPosition)
 }
 
-func (i *Ingredients) Draw(c *chopstick) {
-	c.MoveTo(i.Position)
-	c.DrawTextWithReturn(i.Value)
+// Draws the bento but leaves the chopstick at end of drawing
+func (b *Bento) Draw(c *chopstick) {
+	for _, i := range *b {
+		i.Draw(c)
+	}
 }

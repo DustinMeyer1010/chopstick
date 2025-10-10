@@ -10,32 +10,11 @@ import (
 
 func main() {
 	chopstick.LogInit()
-	/*
-			i1 := chopstick.Ingrident{
-				Position: chopstick.Position{X: 0, Y: 5},
-				Value:    "\033[1;32;41m          \033[0m",
-			}
 
-			i2 := chopstick.Ingrident{
-				Position: chopstick.Position{X: 0, Y: 6},
-				Value:    "\033[1;32;41m          \033[0m",
-			}
-
-			i3 := chopstick.Ingrident{
-				Position: chopstick.Position{X: 0, Y: 7},
-				Value:    "\033[1;32;41m          \033[0m",
-			}
-
-
-		bento := chopstick.Bento{i1, i2, i3}
-	*/
 	ch := chopstick.NewChopstick().
 		Terminal(
 			chopstick.
-				NewTerminal().
-				ALTERNATE().
-				Height(10).
-				Width(10),
+				NewTerminal(),
 		).
 		Shape(chopstick.BlinkingUnderline)
 
@@ -54,7 +33,10 @@ func main() {
 			//bento.Draw(&ch)
 			ch.DrawText("hello world")
 		case "c":
-			chopstick.Debug.Println(ch.GetValueUnderChopstick())
+			element := ch.GetElementUnderChopstick()
+			element.MetaData = "Test"
+			chopstick.Debug.Println(ch.GetElementUnderChopstick().MetaData)
+		case "a":
 		default:
 			exit = false
 		}

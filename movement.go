@@ -12,14 +12,11 @@ import (
 func (c *chopstick) Right() {
 	if c.IsAtEnd() {
 		if c.terminal.HasHorizontalWrap() {
-			Debug.Printf("wrapping: %d\n", c.position.X)
 			c.rightWithWrap()
 		}
-		Debug.Printf("Right: %d\n", c.position.X)
 		return
 	}
 	c.position.X++
-	Debug.Printf("Right: %d\n", c.position.X)
 	Print(RightArrow)
 }
 
@@ -52,12 +49,10 @@ func (c *chopstick) Left() {
 		if c.terminal.HasHorizontalWrap() {
 			c.leftWithWrap()
 		}
-		Debug.Printf("Left: %d\n", c.position.X)
 		return
 	}
 
 	c.position.X--
-	Debug.Printf("Left: %d\n", c.position.X)
 	Print(LeftArrow)
 }
 
@@ -92,12 +87,10 @@ func (c *chopstick) Up() {
 		if c.terminal.HasVerticalWrap() {
 			c.upWithWrap()
 		}
-		Debug.Printf("Up: %d\n", c.position.Y)
 		return
 	}
 
 	c.position.Y--
-	Debug.Printf("Up: %d\n", c.position.Y)
 	Print(UpArrow)
 }
 
@@ -125,13 +118,11 @@ func (c *chopstick) Down() {
 	if c.IsAtBottom() {
 		if c.terminal.HasVerticalWrap() {
 			c.downWithWrap()
-			Debug.Printf("Down: %d\n", c.position.Y)
 		}
 		return
 	}
 
 	c.position.Y++
-	Debug.Printf("Down: %d\n", c.position.Y)
 	Print(DownArrow)
 }
 
@@ -210,12 +201,12 @@ func (c *chopstick) Bottom() {
 // Eample: Height, Width = 10,  x = 55,  y = 68
 //
 // x will move to 5 and y will move to 8
-func (c *chopstick) MoveTo(position Position) {
+func (c *chopstick) MoveTo(p Position) {
 	c.StartOfPage()
-	for range position.X % (c.terminal.width + OFFSET) {
+	for range p.X % (c.terminal.width + OFFSET) {
 		c.Right()
 	}
-	for range position.Y % (c.terminal.height + OFFSET) {
+	for range p.Y % (c.terminal.height + OFFSET) {
 		c.Down()
 	}
 }

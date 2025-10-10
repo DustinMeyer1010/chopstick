@@ -18,8 +18,6 @@ var ansiRegex = regexp.MustCompile(`\x1b\[[0-9;]*m`)
 // Draw Text to screen ansi character are ignored
 func (c *chopstick) DrawText(text ...string) {
 	printString := strings.Join(text, "")
-	realLength := len([]rune(ansiRegex.ReplaceAllString(printString, ""))) // rune-aware length
-	Debug.Println(realLength)
 
 	inEscape := false
 	prevX := c.position.X
@@ -48,14 +46,14 @@ func (c *chopstick) DrawText(text ...string) {
 			c.Down()
 		case '\t':
 			for range 4 {
-				c.terminal.runeMatrix[c.position.Y][c.position.X] = r
+				c.terminal.canvas.setValue(c.position, r)
 				Print(" ")
 				c.left()
 				c.Right()
 			}
 		default:
 			if unicode.IsPrint(r) {
-				c.terminal.runeMatrix[c.position.Y][c.position.X] = r
+				c.terminal.canvas.setValue(c.position, r)
 				Printf("%s", string(r))
 				c.left()
 				c.Right()
@@ -79,26 +77,26 @@ func (c *chopstick) DrawTextWithReturn(text ...string) {
 }
 
 // Erase the Entire terminal
-func (c *chopstick) EraseTerminal() {
+func (c *chopstick) ClearTerminal() {
 	Print(EraseEntireTerminal)
 }
 
 // Erase from chopstick to end of terminal
-func (c *chopstick) EraseToEndOfTermial() {
+func (c *chopstick) ClearToEndOfTermial() {
 	Print(EraseToEndOfTerminal)
 }
 
 // Erase from chopstick to Start of terminal
-func (c *chopstick) EraseToStartOfTerminal() {
+func (c *chopstick) ClearToStartOfTerminal() {
 	Print(EraseToStartOfTerminal)
 }
 
 // Erase from chopstick to Start of line
-func (c *chopstick) EraseToStartOfLine() {
+func (c *chopstick) ClearToStartOfLine() {
 	Print(EraseToStartOfLine)
 }
 
 // Erase from chopstick to End of line
-func (c *chopstick) EraseToEndOfLine() {
+func (c *chopstick) ClearToEndOfLine() {
 	Print(EraseToEndOfLine)
 }

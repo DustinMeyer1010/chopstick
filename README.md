@@ -1,6 +1,6 @@
   <p style="font-size: 1.5em; font-weight: bold;" align="left">Chopstick</span>
 <p align="left">
-  <img src="./logo.png" alt="Chopstick Logo" width="200" style="vertical-align: middle; margin-right: 10px;"/>
+  <img src="./assets/logo.png" alt="Chopstick Logo" width="200" style="vertical-align: middle; margin-right: 10px;"/>
   
 </p>
     <a href="https://github.com/DustinMeyer1010/chopstick/releases"><img src="https://img.shields.io/badge/release-v0.0.0-blue" alt="Latest Release"></a>
@@ -8,6 +8,11 @@
 
 
   Chopstick is a Go package that gives your terminal a pair of imaginary chopsticks for moving and drawing. It tracks a “cursor” (the chopstick) and keeps it within the boundaries of your terminal. You can plate up elements text, symbols, or small UI components and the chopstick will serve them neatly on the terminal, making it quick and easy to build interactive and visually appealing terminal GUIs.
+
+
+# Motivation 
+
+When using other package that deal with terminal GUI, I feel that you have to use pre-determind function to set the location or get a specific look. What I want is to be able to tell my cursor to go to specific location and draw that item. Then define specific element that would be drawn when needed. So you can update on the fly to create an animation. 
 
 # How to use
 1. Import the package
@@ -45,7 +50,7 @@ Create a single item to draw in the terminal
     ```go
     redbar.Draw(&stick)
     ```
-    <img src="Ingredient.gif" width="300" alt="Ingredient Example">
+    <img src="./assets/ingredient.gif" width="300" alt="Ingredient Example">
 
 
 ### Bento
@@ -83,4 +88,4 @@ Combine a bunch of Ingredients to draw all at once
     ```go
     bento.Draw(&stick)
     ```
-    <img src="bento.gif" width="300" alt="Ingredient Example">
+    <img src="./assets/bento.gif" width="300" alt="Ingredient Example">
